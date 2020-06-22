@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .slider {
+
+        }
+
+        .slider__wrap {
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100%;
+            display: inline-block;
+
+            text-align: center;
+        }
+
+        .content {
+            will-change: transform;
+            white-space: nowrap; 
+            transition: transform 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="slider" class="slider">
+        <div class="buttons">
+          <button name="prev">Prev</button>
+          <button name="next">Next</button>
+        </div>
+
+        <div class="slider__wrap">
+            <div class="content" style="transform: translate(-100%);" data-active="1"> <!-- if you need to set initial position to the second slider, or you can use translate(0) to set it to the first slide  -->
+              <div class="slide">
+                <p>content od slide 1</p>
+              </div>
+              <div class="slide">
+                <p>content od slide 2</p>
+              </div>
+              <div class="slide">
+                <p>content od slide 3</p>
+              </div>
+            </div>
+        </div>
+
+        <div class="paginator">
+          <div class="pagin-tracker">1</div>
+          <div class="pagin-tracker active">1</div>
+          <div class="pagin-tracker">1</div>
+        </div>
+    </div>
+
+
+    <script>
+        const slider = document.getElementById('slider');
+        const sliderWrap = slider.querySelector('.slider__wrap');
+        const sliderContent = sliderWrap.querySelector('.content');
+        const sliderButtons = slider.querySelector('.buttons');
+        const buttonPrev = sliderButtons.querySelector('button[name="prev"]');
+        const buttonNext = sliderButtons.querySelector('button[name="next"]');
+        const pages = Array.from(slider.querySelectorAll('.pagin-tracker'));
+        const pagesCount = pages.length;
+        const slidesCount = sliderContent.querySelectorAll('.slide').length;
+
+        let activeIndex = sliderContent.getAttribute('data-active');
+
+        const updatePaginator = () => {
+            for (let i = 0; i < pagesCount; i++) {
+                pages[i].classList.remove('active');
+            }
+
+            if (pages[activeIndex]) {
+                pages[activeIndex].classList.add('active');
+            }
+        };
+
+        const applyStyle = () => {
+            sliderContent.setAttribute('data-active', activeIndex);
+            sliderContent.style.cssText = `transform: translate(-${activeIndex * 100}%);`;
+
+            updatePaginator();
+        };
+
+        buttonPrev.addEventListener('click', () => {
+            if (activeIndex > 0) {
+                activeIndex--;
+
+                applyStyle();
+            }
+        }, false);
+
+        buttonNext.addEventListener('click', () => {
+            if (activeIndex < slidesCount - 1) {
+                activeIndex++;
+
+                applyStyle();
+            }
+        }, false);
+    </script>
+</body>
+</html>
